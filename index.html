@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Win Counter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: black;
+      color: white;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+    #counter {
+      font-size: 48px;
+      margin-bottom: 30px;
+    }
+    #controls {
+      position: absolute;
+      bottom: 150px;
+      left: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    #edit-title {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    input[type="number"], input[type="text"], select {
+      padding: 5px;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    .custom-controls {
+      margin-top: 10px;
+    }
+    textarea {
+      padding: 5px;
+      font-size: 16px;
+      width: 300px;
+      height: 80px;
+      margin-bottom: 10px;
+      background-color: black;
+      color: white;
+      border: 1px solid #fff;
+      resize: none;
+    }
+    #font-controls {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 15px;
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 15px;
+      border-radius: 10px;
+    }
+    label, select, input[type="number"] {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    select {
+      width: 150px;
+    }
+    input[type="number"] {
+      width: 80px;
+    }
+    .finish-button, .reset-button {
+      background-color: green;
+      color: white;
+      font-size: 18px;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 200px;
+      margin-top: 10px;
+      display: block;
+      text-align: center;
+    }
+    .finish-button:hover {
+      background-color: darkgreen;
+    }
+    .reset-button {
+      background-color: red;
+    }
+    .reset-button:hover {
+      background-color: darkred;
+    }
+    .center-buttons {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .finish-button, .reset-button {
+      width: auto;
+    }
+    .side-buttons {
+      position: absolute;
+      bottom: 120px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+      flex-direction: row;
+    }
+    /* Move Reset Score button near font controls */
+    .reset-score-button {
+      background-color: #fff;
+      color: black;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      margin-top: 10px;
+      width: 150px;
+    }
+    .reset-score-button:hover {
+      background-color: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <h1 id="title">ไม่20วินไม่ลงไลฟ์</h1>
+    <div id="counter">0 / 20</div>
+  </div>
+
+  <div id="controls">
+    <div class="button-row">
+      <button onclick="incrementBy(1)">+1</button>
+      <button onclick="incrementBy(5)">+5</button>
+      <button onclick="incrementBy(10)">+10</button>
+    </div>
+    <div class="button-row">
+      <button onclick="decrementBy(1)">-1</button>
+      <button onclick="decrementBy(5)">-5</button>
+      <button onclick="decrementBy(10)">-10</button>
+    </div>
+
+    <div class="custom-controls">
+      <input id="valueInput" type="number" placeholder="ใส่ค่า" />
+      <button onclick="addCustom()">เพิ่ม</button>
+      <button onclick="subtractCustom()">ลด</button>
+    </div>
+
+    <div class="custom-controls">
+      <input id="setValue" type="number" placeholder="ตั้งค่าตรง" />
+      <button onclick="setCounter()">ตั้งค่า</button>
+    </div>
+  </div>
+
+  <div id="edit-title">
+    <textarea id="titleInput" placeholder="แก้หัวข้อ" oninput="updateTitle()"></textarea>
+  </div>
+
+  <div id="font-controls">
+    <label for="fontFamily">เลือกฟอนต์:</label>
+    <select id="fontFamily" onchange="updateFontFamily()">
+      <option value="Arial">Arial</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Times New Roman">Times New Roman</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Sarabun">Sarabun</option>
+      <option value="Angsana New">Angsana New</option>
+      <option value="TH Sarabun New">TH Sarabun New</option>
+      <option value="Supermarket">Supermarket</option>
+      <option value="Fahkwang">Fahkwang</option>
+      <option value="Kanit">Kanit</option>
+      <option value="Lora">Lora</option>
+      <option value="Sukhumvit Set">Sukhumvit Set</option>
+      <option value="Pridi">Pridi</option>
+      <option value="Chakra Petch">Chakra Petch</option>
+      <option value="K2D">K2D</option>
+      <option value="Mitr">Mitr</option>
+      <option value="Noto Sans Thai">Noto Sans Thai</option>
+      <option value="Pattaya">Pattaya</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Prompt">Prompt</option>
+      <option value="Rakkas">Rakkas</option>
+      <option value="Sofia">Sofia</option>
+      <option value="Tisa">Tisa</option>
+      <option value="Mali">Mali</option>
+      <option value="Lobster">Lobster</option>
+      <option value="Boonk">Boonk</option>
+      <option value="TungThai">TungThai</option>
+      <option value="K2">K2</option>
+      <option value="Utharkit">Utharkit</option>
+      <option value="Amatic SC">Amatic SC</option>
+      <option value="Arima Madurai">Arima Madurai</option>
+      <option value="Baloo Tamma 2">Baloo Tamma 2</option>
+      <option value="Cabin">Cabin</option>
+      <option value="Caveat">Caveat</option>
+      <option value="Karla">Karla</option>
+      <option value="Open Sans">Open Sans</option>
+    </select>
+    <button class="reset-score-button" onclick="resetScore()">Reset Score</button>
+  </div>
+
+  <div class="center-buttons">
+    <button class="finish-button" onclick="finishTask()">Finish</button>
+    <button class="reset-button" onclick="resetAll()">Reset All</button>
+  </div>
+
+  <script>
+    let count = 0;
+    let originalTitle = "ไม่20วินไม่ลงไลฟ์";
+
+    function updateCounter() {
+      document.getElementById('counter').textContent = `${count} / 20`;
+    }
+
+    function incrementBy(value) {
+      count += value;
+      updateCounter();
+    }
+
+    function decrementBy(value) {
+      count -= value;
+      updateCounter();
+    }
+
+    function addCustom() {
+      const value = parseInt(document.getElementById('valueInput').value);
+      if (!isNaN(value)) {
+        count += value;
+        updateCounter();
+      } else {
+        alert("กรุณาใส่ตัวเลขที่ถูกต้อง");
+      }
+    }
+
+    function subtractCustom() {
+      const value = parseInt(document.getElementById('valueInput').value);
+      if (!isNaN(value)) {
+        count -= value;
+        updateCounter();
+      } else {
+        alert("กรุณาใส่ตัวเลขที่ถูกต้อง");
+      }
+    }
+
+    function setCounter() {
+      const value = parseInt(document.getElementById('setValue').value);
+      if (!isNaN(value)) {
+        count = value;
+        updateCounter();
+      } else {
+        alert("กรุณาใส่ตัวเลขที่ถูกต้อง");
+      }
+    }
+    function resetScore() {
+      count = 0;
+      updateCounter();
+    }
+
+    function updateTitle() {
+      const newTitle = document.getElementById('titleInput').value;
+      document.getElementById('title').innerHTML = newTitle.replace(/\n/g, '<br>') || originalTitle;
+    }
+
+    function updateFontFamily() {
+      const fontFamily = document.getElementById('fontFamily').value;
+      document.getElementById('title').style.fontFamily = fontFamily;
+      document.getElementById('counter').style.fontFamily = fontFamily;
+    }
+
+    function finishTask() {
+      document.getElementById('title').style.display = 'none'; // ซ่อนหัวข้อ
+      document.getElementById('counter').textContent = "ภารกิจเสร็จแล้วรอลงไลฟ์ :D"; // เปลี่ยนข้อความ
+    }
+
+    function resetAll() {
+      location.reload(); // รีเฟรชหน้าเว็บให้เหมือนการรีเซ็ททั้งหมด
+    }
+  </script>
+</body>
+</html>
